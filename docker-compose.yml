@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  api:
+    build:
+      context: .
+    environment:
+      - NODE_ENV=development
+      - UPLOAD_PATH=/uploads
+      - UPLOADED_PATH=/usr/app/uploads
+    volumes:
+      - .:/usr/app
+      - ./uploads:/usr/app/uploads
+      - /usr/app/node_modules
+    command: npm run prod
+  nginx: 
+    image: nginx:latest
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    depends_on:
+      - api
+    ports:
+      - 8080:8080
